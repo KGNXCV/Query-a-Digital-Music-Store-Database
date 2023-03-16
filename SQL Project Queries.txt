@@ -1,0 +1,54 @@
+
+* Query #1 *
+
+SELECT Artist.Name,
+SUM(InvoiceLine.UnitPrice * InvoiceLine.Quantity) AS Sales_Revenue
+FROM Invoice
+JOIN InvoiceLine
+  	ON InvoiceLine.InvoiceId = Invoice.InvoiceId
+JOIN Track
+  	ON Track.TrackId = InvoiceLine.TrackId
+JOIN Album
+  	ON Track.AlbumId = Album.AlbumId
+JOIN Artist
+  	ON Album.ArtistId = Artist.ArtistId
+GROUP BY Artist.ArtistId
+ORDER BY Sales_Revenue DESC
+LIMIT 10;
+
+
+* Query #2 *
+
+SELECT 
+round(AVG(Customer.CustomerID),0) as Customers, BillingCountry
+From Customer
+JOIN Invoice
+	ON Customer.CustomerId = Invoice.CustomerId
+GROUP BY BillingCountry
+ORDER BY Customers
+Limit 5;
+
+
+* Query #3 *
+
+SELECT
+(COUNT(Genre.GenreId)) AS Number_of_Tracks,Genre.Name
+FROM Genre
+JOIN Track
+	ON Genre.GenreId = Track.GenreId
+GROUP BY Genre.GenreId
+ORDER BY Number_of_Tracks;
+
+
+* Query #4 *
+
+SELECT
+(COUNT(SupportRepId)) AS Number_of_Orders,Employee.LastName, Employee.FirstName
+FROM Employee
+JOIN Customer
+	ON Employee.EmployeeId = Customer.SupportRepId
+JOIN Invoice
+	ON Customer.CustomerId = Invoice.CustomerId
+GROUP BY Customer.SupportRepId
+ORDER BY Number_of_Orders DESC
+LIMIT 3;
